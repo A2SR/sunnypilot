@@ -1,1 +1,1 @@
-#define DEFAULT_MODEL "Tomb Raider 5 (Default)"
+#define DEFAULT_MODEL "TR5 5 w/ DTR policy (Default)"

@@ -1,1 +1,1 @@
-#define DEFAULT_MODEL "Laura Croft (Default)"
+#define DEFAULT_MODEL "Tomb Raider 5 (Default)"

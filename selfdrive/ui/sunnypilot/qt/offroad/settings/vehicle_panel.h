@@ -9,6 +9,7 @@
 
 #include "selfdrive/ui/sunnypilot/qt/offroad/settings/settings.h"
 
+#include "selfdrive/ui/sunnypilot/qt/offroad/settings/vehicle/hyundai_settings.h"
 #include "selfdrive/ui/sunnypilot/qt/offroad/settings/vehicle/platform_selector.h"
 
 class VehiclePanel : public QFrame {
@@ -22,18 +23,17 @@ public slots:
   void updatePanel(bool _offroad);
 
 private:
-  // UI elements
+  void resetBrandSettings();
+
   QStackedLayout* main_layout = nullptr;
   QWidget* vehicleScreen = nullptr;
   PlatformSelector* platformSelector = nullptr;
-  ButtonParamControlSP* hkgtuningToggle = nullptr;
 
-  // State tracking
+  // brand panels
+  HyundaiSettings* hyundaiSettings = nullptr;
+
   bool offroad = false;
-  Params params;
-  int hkg_state = 0;
-  QString toggleDisableMsg(bool openpilotLong) const;
 
 private slots:
-  void updateCarToggles();
+  void updateBrandSettings();
 };

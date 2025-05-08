@@ -20,6 +20,9 @@ public:
 public slots:
   void refresh(bool _offroad);
 
+signals:
+  void refreshPanel();
+
 private:
   void searchPlatforms(const QString &query);
   void setPlatform(const QString &platform = "");

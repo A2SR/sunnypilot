@@ -7,8 +7,8 @@
 
 #include "selfdrive/ui/sunnypilot/qt/offroad/settings/vehicle_panel.h"
 
+#include "selfdrive/ui/sunnypilot/qt/offroad/settings/vehicle/hyundai_settings.h"
 #include "selfdrive/ui/sunnypilot/qt/widgets/scrollview.h"
-#include "vehicle/hyundai_settings.h"
 
 VehiclePanel::VehiclePanel(QWidget *parent) : QFrame(parent) {
   main_layout = new QStackedLayout(this);
@@ -32,6 +32,7 @@ VehiclePanel::VehiclePanel(QWidget *parent) : QFrame(parent) {
   QObject::connect(uiState(), &UIState::offroadTransition, this, &VehiclePanel::updatePanel);
 
   main_layout->addWidget(vehicleScreen);
+  main_layout->setCurrentWidget(vehicleScreen);
 }
 
 void VehiclePanel::showEvent(QShowEvent *event) {
@@ -49,10 +50,13 @@ void VehiclePanel::updatePanel(bool _offroad) {
 }
 
 void VehiclePanel::updateBrandSettings() {
-  QString brand = platformSelector->getPlatformBundle("brand").toString();
+  if (!isVisible()) {
+    return;
+  }
 
   resetBrandSettings();
 
+  QString brand = platformSelector->getPlatformBundle("brand").toString();
   if (brand == "hyundai") {
     hyundaiSettings->setVisible(true);
   }

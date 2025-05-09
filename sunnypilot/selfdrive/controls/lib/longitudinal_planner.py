@@ -5,12 +5,8 @@ This file is part of sunnypilot and is licensed under the MIT License.
 See the LICENSE.md file in the root directory for more details.
 """
 
-import numpy as np
-from typing import cast
-
 from cereal import messaging, custom
 from opendbc.car import structs
-from openpilot.selfdrive.controls.lib.drive_helpers import get_accel_from_plan
 from openpilot.sunnypilot.models.helpers import get_active_model_runner
 from openpilot.sunnypilot.selfdrive.controls.lib.dec.dec import DynamicExperimentalController
 
@@ -20,7 +16,7 @@ DecState = custom.LongitudinalPlanSP.DynamicExperimentalControl.DynamicExperimen
 class LongitudinalPlannerSP:
   def __init__(self, CP: structs.CarParams, mpc):
     self.dec = DynamicExperimentalController(CP, mpc)
-    self.is_snpe = get_active_model_runner() == custom.ModelManagerSP.Runner.snpe
+    self.is_stock = get_active_model_runner() == custom.ModelManagerSP.Runner.stock
 
   def get_mpc_mode(self) -> str | None:
     if not self.dec.active():
@@ -45,13 +41,3 @@ class LongitudinalPlannerSP:
     dec.active = self.dec.active()
 
     pm.send('longitudinalPlanSP', plan_sp_send)
-
-  def override_accel_for_snpe_models(self, output_a_target: float, output_should_stop: bool, speeds: np.ndarray,
-                                     accels: np.ndarray, t_idxs: np.ndarray, action_t: float, vEgoStopping: float) -> tuple[float, bool]:
-    """ Overrides the calculated acceleration target only if the active model is SNPE/thneed.
-        Otherwise, it returns the provided targets unchanged. """
-
-    if self.is_snpe: # SNPE models use only the get_accel_from_plan calculation
-      return cast(tuple[float, bool], get_accel_from_plan(speeds, accels, t_idxs, action_t, vEgoStopping))
-    else: # For non-SNPE models, return the already calculated values from the main planner
-      return output_a_target, output_should_stop

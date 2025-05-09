@@ -42,8 +42,6 @@ void VehiclePanel::showEvent(QShowEvent *event) {
 void VehiclePanel::updatePanel(bool _offroad) {
   platformSelector->refresh(_offroad);
 
-  hyundaiSettings->updateSettings(_offroad);
-
   updateBrandSettings();
 
   offroad = _offroad;
